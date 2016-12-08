@@ -9,10 +9,13 @@ function Square(props) {
 class Board extends React.Component {
 
   renderSquare(i) {
+    // change to this.props and use onClick instead of handleClick
+    // (we removed handle Click)
     return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
   }
 
   render() {
+    // remove the status field and all addtl code in render
     return (
       <div>
         <div className="board-row">
@@ -38,7 +41,7 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor() {
     super();
-    // set state in Game with previous model
+    // set state in Game with empty model
     this.state = {
       history: [{
         squares: Array(9).fill(null)
@@ -48,12 +51,19 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
+    // moved handleClick from Board to Game
+
+    // grab entire history
     const history = this.state.history;
+    // grab current object with squares property
     const current = history[history.length - 1];
+    // make copy of squares
     const squares = current.squares.slice();
+    // early return if winner
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
+    // changing square to current player
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       history: history.concat([{
@@ -64,16 +74,19 @@ class Game extends React.Component {
   }
 
   render() {
+    // make history again and set current and check for winner
     const history = this.state.history;
     const current = history[history.length - 1];
     const winner = calculateWinner(current.squares);
 
+    // set status to win or next player
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
+    // move squares and onClick to props in the Board
     return (
       <div className="game">
         <div className="game-board">
