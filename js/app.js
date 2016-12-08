@@ -1,6 +1,6 @@
 function Square(props) {
   return (
-    <button className="square" onClick={() => props.onClick()}>
+    <button className="square" onClick={(i) => props.onClick(i)}>
       {props.value}
     </button>
   );
@@ -38,7 +38,7 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor() {
     super();
-    // set state in Game with previous model
+    // set state in Game with previous models in history
     this.state = {
       history: [{
         squares: Array(9).fill(null)
@@ -67,7 +67,14 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[history.length - 1];
     const winner = calculateWinner(current.squares);
-
+    const moves = history.map((step, move) => {
+      const desc = move ? 'Move #' + move : 'Game start';
+        return (
+          <li>
+            <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
+          </li>
+        );
+    });
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
@@ -84,7 +91,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{moves}</ol>
         </div>
       </div>
     );
